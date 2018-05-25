@@ -43,9 +43,9 @@ RUN cd / \
 #     && rm server-jre-$java_version-linux-x64.tar.gz \
 #     && ln -s /opt/jdk$java_semver/ /opt/jre-home;
 
-# Download the CAS overlay project \
+# Download my CAS overlay project \
 RUN cd / \
-    && git clone --depth 1 --single-branch https://github.com/apereo/cas-overlay-template.git cas-overlay \
+    && git clone --depth 1 --single-branch https://github.com/cbontemps/cas-overlay-template.git cas-overlay \
     && mkdir -p /etc/cas \
     && mkdir -p cas-overlay/bin;
 
