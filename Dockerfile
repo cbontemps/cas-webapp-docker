@@ -45,7 +45,7 @@ RUN cd / \
 
 # Download my CAS overlay project \
 RUN cd / \
-    && git clone --depth 1 --single-branch https://github.com/cbontemps/cas-overlay-template.git cas-overlay \
+    && git clone --depth 1 --branch 5.2 --single-branch https://github.com/cbontemps/cas-overlay-template.git cas-overlay \
     && mkdir -p /etc/cas \
     && mkdir -p cas-overlay/bin;
 
