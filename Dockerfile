@@ -3,6 +3,7 @@ FROM centos:centos7
 MAINTAINER Apereo Foundation
 
 ENV PATH=$PATH:$JRE_HOME/bin
+ARG cas_version
 
 RUN yum -y install wget tar unzip git \
     && yum -y clean all
@@ -12,7 +13,6 @@ RUN set -x; \
     java_version=8.0.131; \
     zulu_version=8.21.0.1; \
     java_hash=1931ed3beedee0b16fb7fd37e069b162; \
-    
     cd / \
     && wget http://cdn.azul.com/zulu/bin/zulu$zulu_version-jdk$java_version-linux_x64.tar.gz \
     && echo "$java_hash  zulu$zulu_version-jdk$java_version-linux_x64.tar.gz" | md5sum -c - \
@@ -24,7 +24,7 @@ RUN cd / \
 	&& wget http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip \
     && unzip ZuluJCEPolicies.zip \
     && mv -f ZuluJCEPolicies/*.jar /opt/jre-home/lib/security \
-    && rm ZuluJCEPolicies.zip; 
+    && rm ZuluJCEPolicies.zip;
 
 
 # Set up Oracle Java properties
@@ -45,7 +45,7 @@ RUN cd / \
 
 # Download my CAS overlay project \
 RUN cd / \
-    && git clone --depth 1 --branch 5.2 --single-branch https://github.com/cbontemps/cas-overlay-template.git cas-overlay \
+    && git clone --depth 1 --single-branch --branch $cas_version https://github.com/cbontemps/cas-overlay-template.git cas-overlay \
     && mkdir -p /etc/cas \
     && mkdir -p cas-overlay/bin;
 
@@ -69,6 +69,6 @@ WORKDIR /cas-overlay
 ENV JAVA_HOME /opt/jre-home
 ENV PATH $PATH:$JAVA_HOME/bin:.
 
-RUN ./mvnw clean package -T 10
+RUN ./mvnw clean package -T 10 && rm -rf /root/.m2
 
 CMD ["/cas-overlay/bin/run-cas.sh"]
